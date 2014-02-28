@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "readfile.h"
 
 static void set_list_filename(char *list_file, int d)
@@ -196,11 +191,14 @@ void handle_query(char *query_file, int query)
 		printf("%s\n", list_file);
 		if (read_list_file(keywords + i, list_file, d)) {
 			printf("read_list_file failed! Cleanup.\n");
-			break;
+			goto list_fail;
 		}
 		i++;
 	}
 
+	list_intersection(keywords);
+
+list_fail:
 	cleanup_keywords(keywords, keyword_count);
 
 	fclose(fp);
