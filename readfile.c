@@ -206,17 +206,24 @@ fail:
 	free(list_file);
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
+	int query;
 	char *query_file;
 
+	if (argc < 2) {
+		printf("Usage: ./exec $query\n");
+		return 0;
+	}
+
+	query = atoi(argv[1]);
 	query_file = malloc(32);
 	if (!query_file)
 		return 0;
 
 	strcpy(query_file, "./queries/");
 
-	handle_query(query_file, 0);
+	handle_query(query_file, query);
 
 	free(query_file);
 	return 0;
