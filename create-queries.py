@@ -10,7 +10,7 @@ def main():
 	f = open(filename, 'r')
 	id1 = 0
 	for line in f:
-		new_file = "./queries/" + str(id1) +".txt"
+		new_file = "./queries/" + str(id1)
 		print new_file
 		f1 = open(new_file, 'w')
 		f1.write(line)
