@@ -27,7 +27,7 @@ static void set_query_filename(char *query_file, int d)
 	strcpy(query_file + 10, c);
 }
 
-void read_list_file(struct list_desc *desc, char *list_file, int id)
+int read_list_file(struct list_desc *desc, char *list_file, int id)
 {
 	FILE *fp;
 	int d;
@@ -41,7 +41,7 @@ void read_list_file(struct list_desc *desc, char *list_file, int id)
 	fp = fopen(list_file, "r");
 	if (!fp) {
 		printf("%s does not exist!\n", list_file);
-		return;
+		return -1;
 	}
 
 	/* Leaf is PAGE_SIZE. */
@@ -106,7 +106,8 @@ void read_list_file(struct list_desc *desc, char *list_file, int id)
 	desc->list_id = id;
 	desc->ptr = root ? (void *)root : (void *)leaf;
 
-	return;
+	fclose(fp);
+	return 0;
 
 new_leaf_fail:
 	for (i = 0; i < leaf_id; i++)
@@ -117,7 +118,42 @@ root_fail:
 	free(leaf);
 fail:
 	fclose(fp);
+	return -1;
 
+}
+
+void free_root(void* root, int count)
+{
+	int leaf_count;
+	int i;
+	struct leaf_desc* leafs = (struct leaf_desc *)root;
+
+	leaf_count = count / 1024;
+	leaf_count = count % 1024 ? leaf_count + 1 : leaf_count;
+
+	for (i = 0; i < leaf_count; i++) {
+		free(leafs[i].leaf);
+	}
+
+	free(leafs);
+}
+
+void cleanup_keywords(struct list_desc *keywords, int keyword_count)
+{
+	int i;
+	struct list_desc *desc;
+
+	for (i = 0; i < keyword_count; i++) {
+		desc = keywords + i;
+		if (desc->ptr) {
+			if (desc->leaf)
+				free(desc->ptr);
+			else
+				free_root(desc->ptr, desc->count);
+		}
+	}
+
+	free(keywords);
 }
 
 void handle_query(char *query_file, int query)
@@ -150,6 +186,7 @@ void handle_query(char *query_file, int query)
 	keywords = malloc(sizeof(struct list_desc) * keyword_count);
 	if (!keywords)
 		goto fail;
+	memset(keywords, 0, sizeof(keywords));
 
 	fp = fopen(query_file, "r");
 	while(fscanf(fp, "%d", &d) != EOF)
@@ -157,12 +194,16 @@ void handle_query(char *query_file, int query)
 		printf("list_file %d\n", d);
 		set_list_filename(list_file, d); 
 		printf("%s\n", list_file);
-		read_list_file(keywords + i, list_file, d);
+		if (read_list_file(keywords + i, list_file, d)) {
+			printf("read_list_file failed! Cleanup.\n");
+			break;
+		}
 		i++;
 	}
 
+	cleanup_keywords(keywords, keyword_count);
+
 	fclose(fp);
-	free(keywords);
 fail:
 	free(list_file);
 }
