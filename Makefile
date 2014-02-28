@@ -3,14 +3,16 @@ CFLAGS = -O3
 CLIB = -lrt -lpthread
 
 SRCS = $(wildcard *.c)
-BUILD = getlist_btree
+BUILD = linear
 
-btree_objects = readfile.o list_intersection_btree.o 
+common_objects = readfile.o update_list.o
+
+linear_objects = $(common_objects) linear_search.o 
 
 all: $(BUILD)
 
-getlist_btree : $(btree_objects) 
-	$(CC) $(CFLAGS) $(btree_objects) -o $@ $(CLIB)
+linear : $(linear_objects) 
+	$(CC) $(CFLAGS) $(linear_objects) -o $@ $(CLIB)
 
 clean:
 	rm -rf *.o $(BUILD)
