@@ -5,11 +5,11 @@ CLIB = -lrt -lpthread
 SRCS = $(wildcard *.c)
 BUILD = linear binary btree
 
-common_objects = readfile.o update_list.o
+common_objects = readfile.o update_list.o binary_search.o
 
-linear_objects = $(common_objects) linear_search.o 
-binary_objects = $(common_objects) binary_search.o 
-btree_objects = $(common_objects) btree_search.o 
+linear_objects = $(common_objects) linear.o 
+binary_objects = $(common_objects) binary.o 
+btree_objects = $(common_objects) btree.o 
 
 all: $(BUILD)
 
