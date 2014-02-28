@@ -85,6 +85,8 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	int i;
 	int min_count;
 	int min_id, min_list_id;
+	struct timespec start, end;
+	long long time;
 
 	if (keyword_count < 2) {
 		printf("Just %d keywords. Cannot find intersection list\n",
@@ -109,12 +111,16 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	printf("Min keyword %d: count %d, in list %d\n",
 		min_list_id, min_count, min_id);
 
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 0; i < keyword_count; i++) {
 		if (i == min_id)
 			continue;
 
 		update_min_list(keywords, min_id, i);
 	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
 
+	time = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
 	print_result(keywords, min_id);
+	printf("Use %lld nanoseconds\n", time);
 }
