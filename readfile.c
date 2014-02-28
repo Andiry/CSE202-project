@@ -67,6 +67,8 @@ int read_list_file(struct list_desc *desc, char *list_file, int id)
 				root[0].leaf = leaf;
 				root[0].count = 1024;
 				root[0].first_num = leaf[0];
+			} else {
+				root[leaf_id].count = 1024;
 			}
 
 			leaf_id++;
