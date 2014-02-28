@@ -85,15 +85,15 @@ int read_list_file(struct list_desc *desc, char *list_file, int id)
 	if (count <= 1)
 		goto root_fail;
 
-	printf("list %d: total %d numbers, %d leafs\n",
-		id, count - 1, leaf_id + 1);
+//	printf("list %d: total %d numbers, %d leafs\n",
+//		id, count - 1, leaf_id + 1);
 
 	if (root) {
 		root[leaf_id].count = index_id + 1;
-		printf("last leaf contains %d numbers\n", root[leaf_id].count);
-		for (i = 0; i <= leaf_id; i++)
-			printf("%d\t", root[i].first_num);
-		printf("\n");
+//		printf("last leaf contains %d numbers\n", root[leaf_id].count);
+//		for (i = 0; i <= leaf_id; i++)
+//			printf("%d\t", root[i].first_num);
+//		printf("\n");
 	}
 
 	desc->count = count - 1;
@@ -186,9 +186,9 @@ void handle_query(char *query_file, int query)
 	fp = fopen(query_file, "r");
 	while(fscanf(fp, "%d", &d) != EOF)
 	{
-		printf("list_file %d\n", d);
+//		printf("list_file %d\n", d);
 		set_list_filename(list_file, d); 
-		printf("%s\n", list_file);
+//		printf("%s\n", list_file);
 		if (read_list_file(keywords + i, list_file, d)) {
 			printf("read_list_file failed! Cleanup.\n");
 			goto list_fail;
