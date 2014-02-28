@@ -27,7 +27,7 @@ static void set_query_filename(char *query_file, int d)
 	strcpy(query_file + 10, c);
 }
 
-void read_list_file(char *list_file, int id)
+void read_list_file(struct list_desc *desc, char *list_file, int id)
 {
 	FILE *fp;
 	int d;
@@ -101,6 +101,11 @@ void read_list_file(char *list_file, int id)
 		printf("\n");
 	}
 
+	desc->count = count - 1;
+	desc->leaf = root ? 0 : 1;
+	desc->list_id = id;
+	desc->ptr = root ? (void *)root : (void *)leaf;
+
 	return;
 
 new_leaf_fail:
@@ -119,7 +124,10 @@ void handle_query(char *query_file, int query)
 {
 	FILE *fp;
 	int d;
+	int i = 0;
 	char *list_file;
+	struct list_desc *keywords;
+	int keyword_count = 0;
 
 	list_file = malloc(32);
 	if (!list_file)
@@ -136,18 +144,27 @@ void handle_query(char *query_file, int query)
 	}
 
 	while(fscanf(fp, "%d", &d) != EOF)
+		keyword_count++;
+	fclose(fp);
+
+	keywords = malloc(sizeof(struct list_desc) * keyword_count);
+	if (!keywords)
+		goto fail;
+
+	fp = fopen(query_file, "r");
+	while(fscanf(fp, "%d", &d) != EOF)
 	{
 		printf("list_file %d\n", d);
 		set_list_filename(list_file, d); 
 		printf("%s\n", list_file);
-		read_list_file(list_file, d);
+		read_list_file(keywords + i, list_file, d);
+		i++;
 	}
 
-	printf("\n");
-
+	fclose(fp);
+	free(keywords);
 fail:
 	free(list_file);
-	fclose(fp);
 }
 
 int main(void)
