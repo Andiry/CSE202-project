@@ -16,4 +16,4 @@ struct list_desc {
 	int list_id;
 };
 
-void list_intersection(struct list_desc *keywords);
+void list_intersection(struct list_desc *keywords, int keyword_count);

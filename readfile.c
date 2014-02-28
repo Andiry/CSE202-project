@@ -196,7 +196,7 @@ void handle_query(char *query_file, int query)
 		i++;
 	}
 
-	list_intersection(keywords);
+	list_intersection(keywords, keyword_count);
 
 list_fail:
 	cleanup_keywords(keywords, keyword_count);
