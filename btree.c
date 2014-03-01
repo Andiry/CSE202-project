@@ -1,32 +1,7 @@
 #include "readfile.h"
 
-int binary_search_leaf_id(struct leaf_desc *root, int leaf_count, int target)
-{
-	int start = 0;
-	int end = leaf_count - 1;
-	int middle;
-
-	if (root[0].first_num > target)
-		return -1;
-
-	if (root[end].first_num <= target)
-		return end;
-
-	while (start <= end) {
-		middle = (start + end) / 2;
-		if (root[middle].first_num > target)
-			end = middle - 1;
-		else if (root[middle + 1].first_num <= target)
-			start = middle + 1;
-		else
-			return middle;
-	}
-
-	return -1;
-
-}
-
-int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
+int search_in_list(struct list_desc *keywords, int target, int id,
+			int *disk_io, enum algorithm *type)
 {
 	struct leaf_desc *root;
 	int *curr_leaf;
@@ -36,6 +11,7 @@ int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
 	int num_count;
 
 	count = keywords[id].count;
+	*type = BTREE;
 
 	if (keywords[id].leaf) {
 		curr_leaf = (int *)keywords[id].ptr;

@@ -1,6 +1,7 @@
 #include "readfile.h"
 
-int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
+int search_in_list(struct list_desc *keywords, int target, int id,
+			int *disk_io, enum algorithm *type)
 {
 	struct leaf_desc *root = NULL;
 	int *curr_leaf = NULL;
@@ -10,6 +11,7 @@ int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
 	int num_count;
 
 	count = keywords[id].count;
+	*type = BINARY;
 
 	if (keywords[id].leaf) {
 		curr_leaf = (int *)keywords[id].ptr;

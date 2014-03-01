@@ -1,7 +1,7 @@
 #include "readfile.h"
 
-void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
-			int *disk_io)
+static void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
+				int *disk_io, enum algorithm *type)
 {
 	int i;
 	int curr_num;
@@ -33,7 +33,8 @@ void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
 
 		if (curr_num == 0) continue;
 
-		ret = search_in_list(keywords, curr_num, curr_id, disk_io);
+		ret = search_in_list(keywords, curr_num, curr_id,
+					disk_io, type);
 
 		if (!ret)
 			curr_leaf[curr_index] = 0;
@@ -41,7 +42,7 @@ void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
 
 }
 
-void print_result(struct list_desc *keywords, int id)
+static void print_result(struct list_desc *keywords, int id)
 {
 	int curr_num;
 	int curr_index;
@@ -89,6 +90,7 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	struct timespec start, end;
 	long long time;
 	int disk_io;
+	enum algorithm type;
 
 	if (keyword_count < 2) {
 		printf("Just %d keywords. Cannot find intersection list\n",
@@ -118,7 +120,7 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 		if (i == min_id)
 			continue;
 
-		update_min_list(keywords, min_id, i, &disk_io);
+		update_min_list(keywords, min_id, i, &disk_io, &type);
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
 

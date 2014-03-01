@@ -22,7 +22,8 @@ static void set_query_filename(char *query_file, int d)
 	strcpy(query_file + 10, c);
 }
 
-int read_list_file(struct list_desc *desc, char *list_file, int id, int bf)
+static int read_list_file(struct list_desc *desc, char *list_file,
+				int id, int bf)
 {
 	FILE *fp;
 	int d;
@@ -116,7 +117,7 @@ fail:
 
 }
 
-void free_root(void* root, int count)
+static void free_root(void* root, int count)
 {
 	int leaf_count;
 	int i;
@@ -132,7 +133,7 @@ void free_root(void* root, int count)
 	free(leafs);
 }
 
-void cleanup_keywords(struct list_desc *keywords, int keyword_count)
+static void cleanup_keywords(struct list_desc *keywords, int keyword_count)
 {
 	int i;
 	struct list_desc *desc;
@@ -150,7 +151,7 @@ void cleanup_keywords(struct list_desc *keywords, int keyword_count)
 	free(keywords);
 }
 
-void handle_query(char *query_file, int query, int bf)
+static void handle_query(char *query_file, int query, int bf)
 {
 	FILE *fp;
 	int d;
