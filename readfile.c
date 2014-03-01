@@ -22,7 +22,7 @@ static void set_query_filename(char *query_file, int d)
 	strcpy(query_file + 10, c);
 }
 
-int read_list_file(struct list_desc *desc, char *list_file, int id)
+int read_list_file(struct list_desc *desc, char *list_file, int id, int bf)
 {
 	FILE *fp;
 	int d;
@@ -64,12 +64,14 @@ int read_list_file(struct list_desc *desc, char *list_file, int id)
 				root = malloc(sizeof(struct leaf_desc) * 1024);
 				if (!root)
 					goto root_fail;
+				memset(root, 0, sizeof(root));
 				root[0].leaf = leaf;
-				root[0].count = 1024;
 				root[0].first_num = leaf[0];
-			} else {
-				root[leaf_id].count = 1024;
 			}
+
+			root[leaf_id].count = 1024;
+			if (bf)
+				set_bloom_filter(root, leaf_id, 1024);
 
 			leaf_id++;
 			leaf = malloc(sizeof(int) * 1024);
@@ -87,15 +89,10 @@ int read_list_file(struct list_desc *desc, char *list_file, int id)
 	if (count <= 1)
 		goto root_fail;
 
-//	printf("list %d: total %d numbers, %d leafs\n",
-//		id, count - 1, leaf_id + 1);
-
 	if (root) {
 		root[leaf_id].count = index_id + 1;
-//		printf("last leaf contains %d numbers\n", root[leaf_id].count);
-//		for (i = 0; i <= leaf_id; i++)
-//			printf("%d\t", root[i].first_num);
-//		printf("\n");
+		if (bf)
+			set_bloom_filter(root, leaf_id, index_id + 1);
 	}
 
 	desc->count = count - 1;
@@ -153,7 +150,7 @@ void cleanup_keywords(struct list_desc *keywords, int keyword_count)
 	free(keywords);
 }
 
-void handle_query(char *query_file, int query)
+void handle_query(char *query_file, int query, int bf)
 {
 	FILE *fp;
 	int d;
@@ -191,7 +188,7 @@ void handle_query(char *query_file, int query)
 //		printf("list_file %d\n", d);
 		set_list_filename(list_file, d); 
 //		printf("%s\n", list_file);
-		if (read_list_file(keywords + i, list_file, d)) {
+		if (read_list_file(keywords + i, list_file, d, bf)) {
 			printf("read_list_file failed! Cleanup.\n");
 			goto list_fail;
 		}
@@ -211,21 +208,23 @@ fail:
 int main(int argc, char **argv)
 {
 	int query;
+	int bf_enabled;
 	char *query_file;
 
-	if (argc < 2) {
-		printf("Usage: ./exec $query\n");
+	if (argc < 3) {
+		printf("Usage: ./exec $query $use_bloom_filter\n");
 		return 0;
 	}
 
 	query = atoi(argv[1]);
+	bf_enabled = atoi(argv[2]);
 	query_file = malloc(32);
 	if (!query_file)
 		return 0;
 
 	strcpy(query_file, "./queries/");
 
-	handle_query(query_file, query);
+	handle_query(query_file, query, bf_enabled);
 
 	free(query_file);
 	return 0;
