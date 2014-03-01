@@ -10,7 +10,7 @@ def do_work(filename):
 	while query <= 100:
 		i = 0
 		while i < 10:
-			os.system('./linear %d %d %s' %(query, 0, filename))
+#			os.system('./linear %d %d %s' %(query, 0, filename))
 			i += 1
 		query += 1
 	query = 0
