@@ -24,9 +24,9 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 		if (keywords[id].leaf) {
 			curr_index = i;
 		} else {
-			curr_leaf_index = i / 1024;
+			curr_leaf_index = i / INDEX_PER_LEAF;
 			curr_leaf = root[curr_leaf_index].leaf;
-			curr_index = i % 1024;
+			curr_index = i % INDEX_PER_LEAF;
 		}
 
 		curr_num = curr_leaf[curr_index];

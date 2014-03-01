@@ -18,8 +18,8 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 		leaf_count = 1;
 	} else {
 		root = (struct leaf_desc *)keywords[id].ptr;
-		leaf_count = count / 1024;
-		leaf_count += count % 1024 ? 1 : 0;
+		leaf_count = count / INDEX_PER_LEAF;
+		leaf_count += count % INDEX_PER_LEAF ? 1 : 0;
 	}
 
 	for (i = 0; i < leaf_count; i++) {

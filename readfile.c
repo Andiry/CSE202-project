@@ -41,7 +41,7 @@ static int read_list_file(struct list_desc *desc, char *list_file,
 	}
 
 	/* Leaf is PAGE_SIZE. */
-	leaf = malloc(sizeof(int) * 1024);
+	leaf = malloc(sizeof(int) * INDEX_PER_LEAF);
 	if (!leaf) {
 		printf("leaf allocation failed!\n");
 		goto fail;
@@ -55,14 +55,15 @@ static int read_list_file(struct list_desc *desc, char *list_file,
 			continue;
 		}
 
-		index_id = count - leaf_id * 1024 - 1; 
-		if (index_id < 1024) {
+		index_id = count - leaf_id * INDEX_PER_LEAF - 1; 
+		if (index_id < INDEX_PER_LEAF) {
 			leaf[index_id] = d;
 		} else {
 			/* We need a new leaf */
 			if (leaf_id == 0) {
 				/* Allocate root */
-				root = malloc(sizeof(struct leaf_desc) * 1024);
+				root = malloc(sizeof(struct leaf_desc)
+						* LEAF_PER_ROOT);
 				if (!root)
 					goto root_fail;
 				memset(root, 0, sizeof(root));
@@ -70,12 +71,12 @@ static int read_list_file(struct list_desc *desc, char *list_file,
 				root[0].first_num = leaf[0];
 			}
 
-			root[leaf_id].count = 1024;
+			root[leaf_id].count = INDEX_PER_LEAF;
 			if (bf)
-				set_bloom_filter(root, leaf_id, 1024);
+				set_bloom_filter(root, leaf_id, INDEX_PER_LEAF);
 
 			leaf_id++;
-			leaf = malloc(sizeof(int) * 1024);
+			leaf = malloc(sizeof(int) * INDEX_PER_LEAF);
 			if (!leaf)
 				goto new_leaf_fail;
 
@@ -123,8 +124,8 @@ static void free_root(void* root, int count)
 	int i;
 	struct leaf_desc* leafs = (struct leaf_desc *)root;
 
-	leaf_count = count / 1024;
-	leaf_count = count % 1024 ? leaf_count + 1 : leaf_count;
+	leaf_count = count / INDEX_PER_LEAF;
+	leaf_count = count % INDEX_PER_LEAF ? leaf_count + 1 : leaf_count;
 
 	for (i = 0; i < leaf_count; i++) {
 		free(leafs[i].leaf);

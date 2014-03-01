@@ -20,8 +20,8 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 			return 1;
 	} else {
 		root = (struct leaf_desc *)keywords[id].ptr;
-		leaf_count = count / 1024;
-		leaf_count += count % 1024 ? 1 : 0;
+		leaf_count = count / INDEX_PER_LEAF;
+		leaf_count += count % INDEX_PER_LEAF ? 1 : 0;
 
 		leaf_id = binary_search_leaf_id(root, leaf_count, target);
 

@@ -25,9 +25,9 @@ static void update_min_list(struct list_desc *keywords, int min_id,
 		if (keywords[min_id].leaf) {
 			curr_index = i;
 		} else {
-			curr_leaf_index = i / 1024;
+			curr_leaf_index = i / INDEX_PER_LEAF;
 			curr_leaf = root[curr_leaf_index].leaf;
-			curr_index = i % 1024;
+			curr_index = i % INDEX_PER_LEAF;
 		}
 //		printf("%d\t", curr_index);
 		curr_num = curr_leaf[curr_index];
@@ -66,9 +66,9 @@ static void print_result(struct list_desc *keywords, int id)
 		if (keywords[id].leaf) {
 			curr_index = i;
 		} else {
-			curr_leaf_index = i / 1024;
+			curr_leaf_index = i / INDEX_PER_LEAF;
 			curr_leaf = root[curr_leaf_index].leaf;
-			curr_index = i % 1024;
+			curr_index = i % INDEX_PER_LEAF;
 		}
 
 		curr_num = curr_leaf[curr_index];
