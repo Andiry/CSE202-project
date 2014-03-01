@@ -5,25 +5,25 @@
 #include <string.h>
 #include <time.h>
 
-#define BF_COUNT 8
-#define BF_SIZE 512
+#define BF_COUNT 8	// Hash cycles
+#define BF_SIZE 512	// Bloom filter table size (byte)
 
 struct bloom {
 	uint64_t bit_array[BF_SIZE / 8];
 };
 
 struct leaf_desc {
-	int *leaf;
-	int count;
-	int first_num;
-	struct bloom bloom;;
+	int *leaf;		// Pointer to the leaf (4KB)
+	int count;		// # of numbers in this leaf
+	int first_num;		// The first number in the leaf
+	struct bloom bloom;	// Bloom filter
 };
 
 struct list_desc {
-	void *ptr; // Point to a leaf or root
-	int leaf;
-	int count;
-	int list_id;
+	void *ptr; 	// Either point to a leaf or root (leaf_desc)
+	int leaf;	// Indicate this is a leaf or root
+	int count;	// Total # of numbers
+	int list_id;	// The keyword id
 };
 
 void list_intersection(struct list_desc *keywords, int keyword_count);
