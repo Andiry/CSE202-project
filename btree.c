@@ -28,12 +28,9 @@ int binary_search_leaf_id(struct leaf_desc *root, int leaf_count, int target)
 
 int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
 {
-	int curr_num;
-	int curr_index;
 	struct leaf_desc *root;
 	int *curr_leaf;
 	int count;
-	int i;
 	int leaf_count;
 	int leaf_id;
 	int num_count;

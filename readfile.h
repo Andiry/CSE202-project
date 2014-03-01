@@ -6,9 +6,10 @@
 #include <time.h>
 
 #define BF_COUNT 8
+#define BF_SIZE 512
 
 struct bloom {
-	uint64_t bit_array[8];
+	uint64_t bit_array[BF_SIZE / 8];
 };
 
 struct leaf_desc {

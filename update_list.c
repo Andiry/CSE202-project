@@ -7,8 +7,8 @@ void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
 	int curr_num;
 	int curr_index;
 	int curr_leaf_index;
-	struct leaf_desc *root;
-	int *curr_leaf;
+	struct leaf_desc *root = NULL;
+	int *curr_leaf = NULL;
 	int min_count;
 	int ret;
 
@@ -46,8 +46,8 @@ void print_result(struct list_desc *keywords, int id)
 	int curr_num;
 	int curr_index;
 	int curr_leaf_index;
-	struct leaf_desc *root;
-	int *curr_leaf;
+	struct leaf_desc *root = NULL;
+	int *curr_leaf = NULL;
 	int count;
 	int i;
 	int total = 0;

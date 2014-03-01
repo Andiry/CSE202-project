@@ -18,19 +18,18 @@ void set_bloom_filter(struct leaf_desc *root, int leaf_id, int count)
 		for (j = 0; j < BF_COUNT; j++) {
 			hash = Murmur3_32(num, seed);
 			seed = hash;
-			pos = hash % 512;
+			pos = hash % (BF_SIZE * 8);
 
 			array_id = pos / 64;
 			array_index = pos % 64;
 
-			bloom->bit_array[array_id] |= 1 << array_index;
+			bloom->bit_array[array_id] |= (1 << array_index);
 		}
 	}
 }
 
 int check_bloom_filter(struct leaf_desc *root, int leaf_id, int target)
 {
-	int *leaf = root[leaf_id].leaf;
 	struct bloom *bloom = &(root[leaf_id].bloom);
 	unsigned int seed = 0;
 	unsigned int hash = 0;
@@ -42,7 +41,7 @@ int check_bloom_filter(struct leaf_desc *root, int leaf_id, int target)
 	for (i = 0; i < BF_COUNT; i++) {
 		hash = Murmur3_32(target, seed);
 		seed = hash;
-		pos = hash % 512;
+		pos = hash % (BF_SIZE * 8);
 
 		array_id = pos / 64;
 		array_index = pos % 64;
