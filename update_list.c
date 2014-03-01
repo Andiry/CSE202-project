@@ -74,11 +74,11 @@ static void print_result(struct list_desc *keywords, int id)
 
 		if (curr_num) {
 			total++;
-			printf("%d\t", curr_num);
+//			printf("%d\t", curr_num);
 		}
 	}
 
-	printf("\nTotal: %d\n", total);
+	printf("Total: %d\n", total);
 	return;
 }
 
@@ -103,8 +103,8 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	min_id = 0;
 
 	for (i = 0; i < keyword_count; i++) {
-		printf("keyword %d: count %d\n",
-			keywords[i].list_id, keywords[i].count);
+//		printf("keyword %d: count %d\n",
+//			keywords[i].list_id, keywords[i].count);
 		if (min_count > keywords[i].count) {
 			min_count = keywords[i].count;
 			min_list_id = keywords[i].list_id;
@@ -112,8 +112,8 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 		}
 	}
 
-	printf("Min keyword %d: count %d, in list %d\n",
-		min_list_id, min_count, min_id);
+//	printf("Min keyword %d: count %d, in list %d\n",
+//		min_list_id, min_count, min_id);
 
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 0; i < keyword_count; i++) {
@@ -126,5 +126,7 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 
 	time = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
 	print_result(keywords, min_id);
-	printf("Use %lld nanoseconds, disk IO %d\n", time, disk_io);
+	printf("Algorithm %d: Use %lld nanoseconds, disk IO %d\n", type,
+			time, disk_io);
+
 }
