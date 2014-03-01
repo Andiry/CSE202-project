@@ -151,7 +151,7 @@ static void cleanup_keywords(struct list_desc *keywords, int keyword_count)
 	free(keywords);
 }
 
-static void handle_query(char *query_file, int query, int bf)
+static void handle_query(char *query_file, int query, int bf, FILE *output)
 {
 	FILE *fp;
 	int d;
@@ -196,7 +196,7 @@ static void handle_query(char *query_file, int query, int bf)
 		i++;
 	}
 
-	list_intersection(keywords, keyword_count);
+	list_intersection(keywords, keyword_count, query, output);
 
 list_fail:
 	cleanup_keywords(keywords, keyword_count);
@@ -211,22 +211,32 @@ int main(int argc, char **argv)
 	int query;
 	int bf_enabled;
 	char *query_file;
+	char filename[60];
+	FILE *output;
 
-	if (argc < 3) {
-		printf("Usage: ./exec $query $use_bloom_filter\n");
+	if (argc < 4) {
+		printf("Usage: ./exec $query $use_bloom_filter $output_file\n");
 		return 0;
 	}
 
 	query = atoi(argv[1]);
 	bf_enabled = atoi(argv[2]);
+	strcpy(filename, argv[3]);
+
+	output = fopen(filename, "a");
+	if (!output)
+		return 0;
+
 	query_file = malloc(32);
 	if (!query_file)
 		return 0;
 
 	strcpy(query_file, "./queries/");
 
-	handle_query(query_file, query, bf_enabled);
+	handle_query(query_file, query, bf_enabled, output);
 
 	free(query_file);
+	fclose(output);
+
 	return 0;
 }

@@ -34,7 +34,8 @@ struct list_desc {
 	int list_id;	// The keyword id
 };
 
-void list_intersection(struct list_desc *keywords, int keyword_count);
+void list_intersection(struct list_desc *keywords, int keyword_count,
+			int query, FILE *output);
 int search_in_list(struct list_desc *keywords, int target, int id,
 			int *disk_io, enum algorithm *type, int *bf_error);
 

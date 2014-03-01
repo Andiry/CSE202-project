@@ -83,7 +83,8 @@ static void print_result(struct list_desc *keywords, int id)
 	return;
 }
 
-void list_intersection(struct list_desc *keywords, int keyword_count)
+void list_intersection(struct list_desc *keywords, int keyword_count,
+			int query, FILE *output)
 {
 	int i;
 	int min_count;
@@ -132,5 +133,26 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	print_result(keywords, min_id);
 	printf("Algorithm %d: Use %lld nanoseconds, disk IO %d, BF error %d\n",
 			type, time, disk_io, bf_error);
+
+	switch(type) {
+	case LINEAR:
+		fprintf(output, "%s,%d,%lld,%d,%d", "Linear search", query,
+			time, disk_io, bf_error);
+		break;
+	case BINARY:
+		fprintf(output, "%s,%d,%lld,%d,%d", "Binary search", query,
+			time, disk_io, bf_error);
+		break;
+	case BTREE:
+		fprintf(output, "%s,%d,%lld,%d,%d", "Btree search", query,
+			time, disk_io, bf_error);
+		break;
+	case BLOOM_FILTER:
+		fprintf(output, "%s,%d,%lld,%d,%d", "Bloom-filter", query,
+			time, disk_io, bf_error);
+		break;
+	default:
+		break;
+	}
 
 }
