@@ -131,8 +131,8 @@ void list_intersection(struct list_desc *keywords, int keyword_count,
 
 	time = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
 	print_result(keywords, min_id);
-	printf("Algorithm %d: Use %lld nanoseconds, disk IO %d, BF error %d\n",
-			type, time, disk_io, bf_error);
+	printf("Algorithm %d: Query %d, use %lld ns, disk IO %d, BF error %d\n",
+			type, query, time, disk_io, bf_error);
 
 	switch(type) {
 	case LINEAR:
