@@ -1,7 +1,7 @@
 #include "readfile.h"
 
 int search_in_list(struct list_desc *keywords, int target, int id,
-			int *disk_io, enum algorithm *type)
+			int *disk_io, enum algorithm *type, int *bf_error)
 {
 	struct leaf_desc *root;
 	int *curr_leaf;
@@ -31,6 +31,7 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 			(*disk_io)++;
 			if (binary_search(curr_leaf, target, num_count))
 				return 1;
+			(*bf_error)++;
 		}
 	}
 

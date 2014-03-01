@@ -1,7 +1,7 @@
 #include "readfile.h"
 
 int search_in_list(struct list_desc *keywords, int target, int id,
-			int *disk_io, enum algorithm *type)
+			int *disk_io, enum algorithm *type, int *bf_error)
 {
 	struct leaf_desc *root = NULL;
 	int *curr_leaf = NULL;
