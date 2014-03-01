@@ -136,19 +136,19 @@ void list_intersection(struct list_desc *keywords, int keyword_count,
 
 	switch(type) {
 	case LINEAR:
-		fprintf(output, "%s,%d,%lld,%d,%d", "Linear search", query,
+		fprintf(output, "%s,%d,%lld,%d,%d\n", "Linear search", query,
 			time, disk_io, bf_error);
 		break;
 	case BINARY:
-		fprintf(output, "%s,%d,%lld,%d,%d", "Binary search", query,
+		fprintf(output, "%s,%d,%lld,%d,%d\n", "Binary search", query,
 			time, disk_io, bf_error);
 		break;
 	case BTREE:
-		fprintf(output, "%s,%d,%lld,%d,%d", "Btree search", query,
+		fprintf(output, "%s,%d,%lld,%d,%d\n", "Btree search", query,
 			time, disk_io, bf_error);
 		break;
 	case BLOOM_FILTER:
-		fprintf(output, "%s,%d,%lld,%d,%d", "Bloom-filter", query,
+		fprintf(output, "%s,%d,%lld,%d,%d\n", "Bloom-filter", query,
 			time, disk_io, bf_error);
 		break;
 	default:
