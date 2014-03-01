@@ -26,7 +26,7 @@ struct list_desc {
 };
 
 void list_intersection(struct list_desc *keywords, int keyword_count);
-int search_in_list(struct list_desc *keywords, int target, int id);
+int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io);
 
 /* binary search */
 int binary_search(int *leaf, int target, int count);

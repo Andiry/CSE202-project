@@ -1,6 +1,7 @@
 #include "readfile.h"
 
-void update_min_list(struct list_desc *keywords, int min_id, int curr_id)
+void update_min_list(struct list_desc *keywords, int min_id, int curr_id,
+			int *disk_io)
 {
 	int i;
 	int curr_num;
@@ -32,7 +33,7 @@ void update_min_list(struct list_desc *keywords, int min_id, int curr_id)
 
 		if (curr_num == 0) continue;
 
-		ret = search_in_list(keywords, curr_num, curr_id);
+		ret = search_in_list(keywords, curr_num, curr_id, disk_io);
 
 		if (!ret)
 			curr_leaf[curr_index] = 0;
@@ -87,6 +88,7 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 	int min_id, min_list_id;
 	struct timespec start, end;
 	long long time;
+	int disk_io;
 
 	if (keyword_count < 2) {
 		printf("Just %d keywords. Cannot find intersection list\n",
@@ -116,11 +118,11 @@ void list_intersection(struct list_desc *keywords, int keyword_count)
 		if (i == min_id)
 			continue;
 
-		update_min_list(keywords, min_id, i);
+		update_min_list(keywords, min_id, i, &disk_io);
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
 
 	time = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
 	print_result(keywords, min_id);
-	printf("Use %lld nanoseconds\n", time);
+	printf("Use %lld nanoseconds, disk IO %d\n", time, disk_io);
 }

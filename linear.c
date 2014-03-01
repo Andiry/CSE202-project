@@ -1,10 +1,10 @@
 #include "readfile.h"
 
-int search_in_list(struct list_desc *keywords, int target, int id)
+int search_in_list(struct list_desc *keywords, int target, int id, int *disk_io)
 {
 	int curr_num;
 	int curr_index;
-	int curr_leaf_index;
+	int curr_leaf_index = 0;
 	struct leaf_desc *root;
 	int *curr_leaf;
 	int count;
@@ -29,10 +29,15 @@ int search_in_list(struct list_desc *keywords, int target, int id)
 
 		curr_num = curr_leaf[curr_index];
 
-		if (curr_num == target)
+		if (curr_num == target) {
+			if (!keywords[id].leaf)	
+				*disk_io = *disk_io + curr_leaf_index + 1;
 			return 1;
+		}
 	}
 
+	if (!keywords[id].leaf)	
+		*disk_io = *disk_io + curr_leaf_index + 1;
 	return 0;
 }
 
