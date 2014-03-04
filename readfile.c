@@ -1,5 +1,8 @@
 #include "readfile.h"
 
+int BF_COUNT;
+int BF_SIZE;
+
 static void set_list_filename(char *list_file, int d)
 {
 	char c[20];
@@ -215,14 +218,16 @@ int main(int argc, char **argv)
 	char filename[60];
 	FILE *output;
 
-	if (argc < 4) {
-		printf("Usage: ./exec $query $use_bloom_filter $output_file\n");
+	if (argc < 6) {
+		printf("Usage: ./exec $query $use_bloom_filter $output_file $BF_COUNT $BF_SIZE\n");
 		return 0;
 	}
 
 	query = atoi(argv[1]);
 	bf_enabled = atoi(argv[2]);
 	strcpy(filename, argv[3]);
+	BF_COUNT = atoi(argv[4]);
+	BF_SIZE = atoi(argv[5]);
 
 	output = fopen(filename, "a");
 	if (!output)

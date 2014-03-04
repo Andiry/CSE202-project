@@ -148,8 +148,8 @@ void list_intersection(struct list_desc *keywords, int keyword_count,
 			time, disk_io, bf_error);
 		break;
 	case BLOOM_FILTER:
-		fprintf(output, "%s,%d,%lld,%d,%d\n", "Bloom-filter", query,
-			time, disk_io, bf_error);
+		fprintf(output, "%s,%d,%lld,%d,%d,%d,%d\n", "Bloom-filter", query,
+			time, disk_io, bf_error,BF_COUNT,BF_SIZE);
 		break;
 	default:
 		break;

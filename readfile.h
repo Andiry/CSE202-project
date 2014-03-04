@@ -5,8 +5,8 @@
 #include <string.h>
 #include <time.h>
 
-#define BF_COUNT 8	// Hash cycles
-#define BF_SIZE 512	// Bloom filter table size (byte)
+extern int BF_COUNT;	// Hash cycles
+extern int BF_SIZE;	// Bloom filter table size (byte)
 
 #define	LEAF_PER_ROOT	2048	// How many leaves a root can hold
 #define	INDEX_PER_LEAF	1024	// How many indexs a leaf can hold
@@ -20,7 +20,7 @@ enum algorithm
 };
 
 struct bloom {
-	uint64_t bit_array[BF_SIZE / 8];
+	uint64_t bit_array[128];
 };
 
 struct leaf_desc {
