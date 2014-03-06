@@ -28,6 +28,8 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 		} else {
 			curr_leaf = root[i].leaf;
 			num_count = root[i].count;
+			if (root[i].first_num > target)
+				break;
 		}
 
 		if (binary_search(curr_leaf, target, num_count)) {
@@ -38,7 +40,7 @@ int search_in_list(struct list_desc *keywords, int target, int id,
 	}
 
 	if (!keywords[id].leaf)
-		*disk_io += leaf_count;
+		*disk_io += i;
 	return 0;
 }
 

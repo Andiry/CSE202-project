@@ -10,28 +10,28 @@ def do_work(filename):
 	while query <= 100:
 		i = 0
 		while i < 10:
-#			os.system('./linear %d %d %s' %(query, 0, filename))
+			os.system('./linear %d %d %s %d %d' %(query, 0, filename, 2, 512))
 			i += 1
 		query += 1
 	query = 0
 	while query <= 100:
 		i = 0
 		while i < 10:
-			os.system('./binary %d %d %s' %(query, 0, filename))
+			os.system('./binary %d %d %s %d %d' %(query, 0, filename, 2, 512))
 			i += 1
 		query += 1
 	query = 0
 	while query <= 100:
 		i = 0
 		while i < 10:
-			os.system('./btree %d %d %s' %(query, 0, filename))
+			os.system('./btree %d %d %s %d %d' %(query, 0, filename, 2, 512))
 			i += 1
 		query += 1
 	query = 0
 	while query <= 100:
 		i = 0
 		while i < 10:
-			os.system('./bloom_filter %d %d %s' %(query, 1, filename))
+			os.system('./bloom_filter %d %d %s %d %d' %(query, 1, filename, 2, 512))
 			i += 1
 		query += 1
 
